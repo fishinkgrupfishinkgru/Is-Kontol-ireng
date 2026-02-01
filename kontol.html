@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foto dengan Efek RGB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .photo-frame {
+            position: relative;
+            display: inline-block;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px auto;
+            box-shadow: 
+                0 0 30px rgba(255, 0, 0, 0.7),
+                0 0 60px rgba(0, 255, 0, 0.5),
+                0 0 90px rgba(0, 0, 255, 0.3);
+            animation: rgb-glow 4s linear infinite;
+        }
+        
+        @keyframes rgb-glow {
+            0% {
+                box-shadow: 
+                    0 0 30px rgba(255, 0, 0, 0.7),
+                    0 0 60px rgba(0, 255, 0, 0.5),
+                    0 0 90px rgba(0, 0, 255, 0.3);
+            }
+            33% {
+                box-shadow: 
+                    0 0 30px rgba(0, 255, 0, 0.7),
+                    0 0 60px rgba(0, 0, 255, 0.5),
+                    0 0 90px rgba(255, 0, 0, 0.3);
+            }
+            66% {
+                box-shadow: 
+                    0 0 30px rgba(0, 0, 255, 0.7),
+                    0 0 60px rgba(255, 0, 0, 0.5),
+                    0 0 90px rgba(0, 255, 0, 0.3);
+            }
+            100% {
+                box-shadow: 
+                    0 0 30px rgba(255, 0, 0, 0.7),
+                    0 0 60px rgba(0, 255, 0, 0.5),
+                    0 0 90px rgba(0, 0, 255, 0.3);
+            }
+        }
+        
+        .photo {
+            display: block;
+            max-width: 90vw;
+            max-height: 70vh;
+            border-radius: 8px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .rgb-dots {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border-radius: 10px;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .rgb-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: float-around 8s linear infinite;
+        }
+        
+        .rgb-dot.red {
+            background-color: #ff0000;
+            box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+        }
+        
+        .rgb-dot.green {
+            background-color: #00ff00;
+            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+        }
+        
+        .rgb-dot.blue {
+            background-color: #0000ff;
+            box-shadow: 0 0 10px #0000ff, 0 0 20px #0000ff;
+        }
+        
+        @keyframes float-around {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(20px, -20px) scale(1.2);
+            }
+            50% {
+                transform: translate(0, -40px) scale(1);
+            }
+            75% {
+                transform: translate(-20px, -20px) scale(0.8);
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+        }
+        
+        .title {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+        
+        .instructions {
+            color: #aaa;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            max-width: 500px;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 768px) {
+            .photo-frame {
+                padding: 15px;
+            }
+            
+            .title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">EH ADA KEMBARAN LU NIH LAGI POSE</h1>
+        
+        <div class="photo-frame" id="photoFrame">
+            <img src="https://files.catbox.moe/xzmyrg.jpg" alt="Foto" class="photo" id="photo" onerror="replaceWithFallbackImage()">
+            <div class="rgb-dots" id="rgbDots"></div>
+        </div>
+        
+        <p class="instructions">
+       
+        </p>
+    </div>
+    
+    <script>
+        // Membuat titik-titik RGB
+        function createRGBDots() {
+            const rgbDotsContainer = document.getElementById('rgbDots');
+            const colors = ['red', 'green', 'blue'];
+            
+            // Membuat 30 titik RGB
+            for (let i = 0; i < 30; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('rgb-dot');
+                dot.classList.add(colors[i % 3]);
+                
+                // Posisi acak di sekitar bingkai
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                
+                dot.style.left = `${posX}%`;
+                dot.style.top = `${posY}%`;
+                
+                // Animasi dengan delay acak
+                dot.style.animationDelay = `${Math.random() * 5}s`;
+                dot.style.animationDuration = `${6 + Math.random() * 6}s`;
+                
+                rgbDotsContainer.appendChild(dot);
+            }
+        }
+        
+        // Fallback jika gambar tidak bisa dimuat
+        function replaceWithFallbackImage() {
+            const photo = document.getElementById('photo');
+            photo.src = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
+            photo.alt = "Gambar placeholder karena gambar asli tidak tersedia";
+            
+            // Update instruksi
+            const instructions = document.querySelector('.instructions');
+            instructions.innerHTML = "Gambar asli tidak dapat dimuat dari link yang diberikan. Berikut adalah gambar placeholder dengan efek RGB yang sama. Anda bisa mengganti URL gambar di dalam kode dengan URL gambar Anda sendiri.";
+            instructions.style.color = "#ff9999";
+        }
+        
+        // Inisialisasi saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            createRGBDots();
+            
+            // Cek jika gambar error langsung (untuk kasus CORS atau link tidak valid)
+            const photo = document.getElementById('photo');
+            photo.onerror = function() {
+                if (photo.src.includes('catbox.moe')) {
+                    replaceWithFallbackImage();
+                }
+            };
+            
+            // Tambahkan efek interaktif
+            const frame = document.getElementById('photoFrame');
+            frame.addEventListener('mouseover', function() {
+                frame.style.transform = 'scale(1.02)';
+                frame.style.transition = 'transform 0.3s ease';
+            });
+            
+            frame.addEventListener('mouseout', function() {
+                frame.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
